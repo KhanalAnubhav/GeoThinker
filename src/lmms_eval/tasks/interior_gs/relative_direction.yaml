@@ -1,0 +1,26 @@
+dataset_path: /mnt/4TB_HDD/scene_understanding/dataset/Interior_GS/
+dataset_kwargs:
+  data_files:
+    test: interior_gs_relative_direction.jsonl
+task: interior_gs_relative_direction
+test_split: test
+output_type: generate_until
+doc_to_visual: !function utils.interior_gs_doc_to_visual
+doc_to_text: !function utils.interior_gs_doc_to_text
+doc_to_target: gt_answer
+generation_kwargs:
+  max_new_tokens: 128
+  temperature: 0
+  top_p: 1.0
+  num_beams: 1
+  do_sample: false
+process_results: !function utils.interior_gs_process_results
+metric_list:
+  - metric: interior_gs_results
+    aggregation: !function utils.interior_gs_aggregate_results
+    higher_is_better: true
+lmms_eval_specific_kwargs:
+  default:
+    pre_prompt: "These are 16 frames sampled from a video of an interior scene."
+    mca_post_prompt: "Answer with the best option directly."
+    na_post_prompt: "Please answer the question using a single word or phrase."

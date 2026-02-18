@@ -1,0 +1,10 @@
+group: interior_gs
+task:
+  - interior_gs_existence
+  - interior_gs_absolute_distance
+  - interior_gs_object_count
+  - interior_gs_object_size
+  - interior_gs_relative_direction
+  - interior_gs_relative_distance
+  - interior_gs_reasoning
+aggregate_metric: true

@@ -1,0 +1,42 @@
+
+dataset_path: /mnt/4TB_HDD/scene_understanding # This was modified ourselves.
+dataset_kwargs:
+  token: True
+  data_files: MindCube/raw/MindCube_train_clean.jsonl # This was added by us # NOTE: the current setup only loads the annotations in the provided files as train files. Besdies, this it is also possible to load the test files. However, for such a setup we need to pass a dict [Accordingly to my current reading of the code.]
+  # load_from_disk: True # NOTE: This modification was added by us.
+  # cache_dir: vsibench
+  # video: True
+task: mindcube
+test_split: train # NOTE: changed to train; as there is no test split in the dataset.
+output_type: generate_until # NOTE: Why is this generate until and not something like Multi-choice answers?
+doc_to_visual: !function utils.mindcube_doc_to_visual
+doc_to_text: !function utils.mindcube_doc_to_text
+doc_to_target: "gt_answer"
+generation_kwargs:
+  max_new_tokens: 16
+  temperature: 0
+  top_p: 1.0
+  num_beams: 1
+  do_sample: false
+# The return value of process_results will be used by metrics
+process_results: !function utils.mindcube_process_results
+# Note that the metric name can be either a registed metric function (such as the case for GQA) or a key name returned by process_results
+metric_list:
+  - metric: mindcube_score # NOTE: For our dataset we might need to create these one's as well.
+    aggregation: !function utils.mindcube_aggregate_results
+    higher_is_better: true
+lmms_eval_specific_kwargs:
+  default:
+    pre_prompt: ""
+    mca_post_prompt: "Answer with the option's letter from the given choices directly."
+    na_post_prompt: "Please answer the question using a single word or phrase."
+  gemini_api:
+    pre_prompt: ""
+    mca_post_prompt: "Answer with the option's letter from the given choices directly."
+    na_post_prompt: "Do not response anything other than a single number!"
+  gpt4v:
+    pre_prompt: ""
+    mca_post_prompt: "Answer with the option's letter from the given choices directly."
+    na_post_prompt: "Do not response anything other than a single number!"
+metadata:
+  - version: 0.0

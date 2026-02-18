@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "LMMS Eval: GeoThinker",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "accelerate.commands.launch",
+            "args": [
+                "--num_processes=8",
+                "--main_process_port", "29505",
+                "-m", "lmms_eval",
+                "--model", "geothinker",
+                "--model_args", "pretrained=GeoThinker-8B,use_flash_attention_2=false,max_num_frames=32,max_length=12800,max_pixels=451584,min_pixels=12544",
+                "--tasks", "interior_gs_existence",
+                "--batch_size", "1",
+                "--output_path", "logs/existence"
+            ],
+            "env": {
+                "LMMS_EVAL_LAUNCHER": "accelerate",
+                "CUDA_VISIBLE_DEVICES": "0",
+                "NCCL_NVLS_ENABLE": "0",
+                "PYTHONPATH": "${workspaceFolder}/GeoThinker"
+            },
+            "console": "integratedTerminal",
+            "justMyCode": false
+        }
+    ]
+}
